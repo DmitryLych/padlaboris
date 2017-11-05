@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -20,6 +22,9 @@ import java.util.List;
 public class DefaultPatientService implements PatientService {
 
     private final PatientRepository patientRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Patient create(final Patient patient) {
@@ -42,6 +47,10 @@ public class DefaultPatientService implements PatientService {
     public Patient update(final Patient patient) {
 
         log.info("Patient updated.");
+
+        if (patient.isNew()) {
+            return entityManager.merge(patient);
+        }
 
         return patientRepository.save(patient);
     }

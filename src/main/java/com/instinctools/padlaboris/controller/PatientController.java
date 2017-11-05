@@ -22,12 +22,14 @@ public class PatientController {
 
     private DozerBeanMapper dozerBeanMapper;
 
-    @RequestMapping(value = "/patients/{id}", method = RequestMethod.PUT)
-    public ResponseEntity update(@RequestBody PatientDto patientDto, @PathVariable Integer id) {
+    @RequestMapping(value = "/patients", method = RequestMethod.PUT)
+    public ResponseEntity update(@RequestBody PatientDto patientDto) {
         this.dozerBeanMapper = new DozerBeanMapper();
         Patient patient = dozerBeanMapper.map(patientDto, Patient.class);
 
-        return ResponseEntity.ok().body(patientService.updateById(id, patient.getFirstName()));
+        Patient updated = patientService.update(patient);
+
+        return ResponseEntity.ok(dozerBeanMapper.map(updated, PatientDto.class));
     }
 
     @RequestMapping(value = "/patients", method = RequestMethod.GET)
@@ -41,9 +43,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/patients", method = RequestMethod.POST)
-    public ResponseEntity createPatient(@RequestBody PatientDto patientDto)
-
-    {
+    public ResponseEntity createPatient(@RequestBody PatientDto patientDto) {
         this.dozerBeanMapper = new DozerBeanMapper();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(patientService.create(dozerBeanMapper.map(patientDto, Patient.class)));
