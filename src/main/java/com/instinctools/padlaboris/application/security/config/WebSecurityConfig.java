@@ -4,6 +4,7 @@ import com.instinctools.padlaboris.application.security.filter.AuthenticationTok
 import com.instinctools.padlaboris.application.security.service.jwt.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/**").hasAuthority("ADMIN")
                 .antMatchers("/signUp", "/users/**", "/patients/**").hasAuthority("DOCTOR")
