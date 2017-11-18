@@ -29,7 +29,7 @@ public class PatientDto implements Serializable {
     private String lastName;
 
     @JsonProperty
-    private long birthDate;
+    private Long birthDate;
 
     @JsonProperty
     private String gender;
@@ -41,10 +41,10 @@ public class PatientDto implements Serializable {
     private String mobileNumber;
 
     @JsonProperty
-    private long lastChangeDate;
+    private Long lastChangeDate;
 
     @JsonProperty
-    private long deathDate;
+    private Long deathDate;
 
     @JsonProperty
     private DetailDto details;

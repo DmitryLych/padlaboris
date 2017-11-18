@@ -3,6 +3,7 @@ package com.instinctools.padlaboris.application.controller;
 import com.instinctools.padlaboris.application.dto.DiseaseDto;
 import com.instinctools.padlaboris.domain.model.Disease;
 import com.instinctools.padlaboris.domain.model.Patient;
+import com.instinctools.padlaboris.domain.model.Recipe;
 import com.instinctools.padlaboris.domain.service.DiseaseService;
 import com.instinctools.padlaboris.domain.service.PatientService;
 import lombok.RequiredArgsConstructor;
@@ -97,9 +98,11 @@ public class DiseaseController {
     public ResponseEntity updateDisease(@RequestBody final DiseaseDto diseaseDto,
                                         @PathVariable("id") final Integer patientId) {
         final Disease disease = dozerBeanMapper.map(diseaseDto, Disease.class);
+        final List<Recipe> recipes = diseaseService.findById(diseaseDto.getId()).getRecipes();
         final Patient patient = patientService.fetch(patientId);
 
         disease.setPatient(patient);
+        disease.setRecipes(recipes);
 
         final Disease saved = diseaseService.save(disease);
         final DiseaseDto savedDto = dozerBeanMapper.map(saved, DiseaseDto.class);
